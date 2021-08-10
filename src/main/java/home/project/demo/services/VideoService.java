@@ -56,7 +56,9 @@ public class VideoService {
         }
         User user = userOptional.get();
         Set<Tag> ListTag = getTagsList(tags);
+        video.setUser(user);
         video.setTags(ListTag);
+        video.setFile(file.getOriginalFilename());
         video = saveVideo(video);
         video.setFile(uploadFiles(file, video.getId()));
         VideoDto videoDto = parserVideoToDTO(video, new ArrayList<>(ListTag), user);

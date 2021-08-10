@@ -39,4 +39,9 @@ public class VideoController {
     public ResponseEntity getComment() {
         return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
     }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity DeleteVideo() {
+        return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
+    }
 }
