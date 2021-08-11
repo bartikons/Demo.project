@@ -8,7 +8,6 @@ import home.project.demo.models.Tag;
 import home.project.demo.models.User;
 import home.project.demo.models.Video;
 import home.project.demo.repositories.FileTypeRepository;
-import home.project.demo.repositories.TagRepository;
 import home.project.demo.repositories.UserRepository;
 import home.project.demo.repositories.VideoRepository;
 import org.modelmapper.ModelMapper;
@@ -26,25 +25,27 @@ import java.util.stream.Collectors;
 public class VideoService {
     @Value("${files.size}")
     Long maxFileSize ;
-    private final TagRepository tagRepository;
+    private final TagService tagService;
     private final StorageService storageService;
     private final UserRepository userRepository;
     private final VideoRepository videoRepository;
     private final FileTypeRepository fileTypeRepository;
+    private final AuthenticationService authenticationService;
 
     @Autowired
-    public VideoService(TagRepository tagRepository, StorageService storageService, UserRepository userRepository, VideoRepository videoRepository,FileTypeRepository fileTypeRepository) {
-        this.tagRepository = tagRepository;
+    public VideoService(AuthenticationService authenticationService,TagService tagService, StorageService storageService, UserRepository userRepository, VideoRepository videoRepository,FileTypeRepository fileTypeRepository) {
+        this.tagService = tagService;
         this.storageService = storageService;
         this.userRepository = userRepository;
         this.videoRepository = videoRepository;
         this.fileTypeRepository = fileTypeRepository;
+        this.authenticationService = authenticationService;
     }
 
     public ResponseEntity<VideoDto> addVideo(MultipartFile file, Video video, List<String> tags) {
 
         file.getSize();
-        Optional<User> userOptional = getUserById(1L);
+        Optional<User> userOptional = getUserById(authenticationService.getIdFromJwt());
         if (file.getSize() > (maxFileSize * 1024 * 1024)) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
@@ -55,8 +56,10 @@ public class VideoService {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         User user = userOptional.get();
-        Set<Tag> ListTag = getTagsList(tags);
+        Set<Tag> ListTag = tagService.getTagsList(tags);
+        video.setUser(user);
         video.setTags(ListTag);
+        video.setFile(file.getOriginalFilename());
         video = saveVideo(video);
         video.setFile(uploadFiles(file, video.getId()));
         VideoDto videoDto = parserVideoToDTO(video, new ArrayList<>(ListTag), user);
@@ -66,8 +69,6 @@ public class VideoService {
     public boolean verifyVideoExtension(MultipartFile video) {
 
         List<FileType> availableTypes = fileTypeRepository.findAllByType("MOVIE");
-        availableTypes.forEach(System.out::println);
-        System.out.println(video.getContentType());
         List<String> types = availableTypes.stream().map(FileType::getMime).collect(Collectors.toList());
         if (types.contains(video.getContentType())) {
             return true;
@@ -83,17 +84,7 @@ public class VideoService {
         return userRepository.findById(id);
     }
 
-    public Set<Tag> getTagsList(List<String> tags) {
-        Set<Tag> tagsList = new HashSet<>();
-        tags.stream().forEach(tag -> {
-            if (!tagRepository.existsByNameTag(tag)) {
 
-                tagsList.add(tagRepository.save(new Tag(tag)));
-            } else
-                tagsList.add(tagRepository.findTopByNameTag(tag));
-        });
-        return tagsList;
-    }
 
     public String uploadFiles(MultipartFile file, Long videoId) {
         String filename = "";

@@ -21,25 +21,13 @@ public class StartValue implements ApplicationRunner {
         this.fileTypeRepository=fileTypeRepository;
 
     }
-
+    //Temporal
     @Override
     public void run(ApplicationArguments args) throws Exception {
         User user =new User("name", "pass");
         User user1 =new User("name", "pass");
-        User user2 =new User("name", "pass");
-        User user3 =new User("name", "pass");
-        User user4 =new User("name", "pass");
-        User user5 =new User("name", "pass");
-        User user6 =new User("name", "pass");
-        User user7 =new User("name", "pass");
         userRepository.save(user);
         userRepository.save(user1);
-        userRepository.save(user2);
-        userRepository.save(user3);
-        userRepository.save(user4);
-        userRepository.save(user5);
-        userRepository.save(user6);
-        userRepository.save(user7);
 
         List<FileType> nonRestrictedExtensions = new ArrayList<>();
         nonRestrictedExtensions.add(new FileType("video/mp4", "mp4", "MOVIE"));

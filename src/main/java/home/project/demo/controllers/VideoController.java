@@ -22,12 +22,13 @@ public class VideoController {
 
     @PostMapping(value = "/upload", consumes = "multipart/form-data", produces = "application/json")
     public ResponseEntity<VideoDto> upload(
-            @RequestParam(value = "Video") MultipartFile files,
-            @RequestParam("description") String description,
+            @RequestParam(value = "file") MultipartFile file,
+            @RequestParam("tags") List<String> tags,
             @RequestParam("title") String title,
-            @RequestParam("tags") List<String> tags) {
+            @RequestParam("description") String description
+    ) {
         Video video = new Video(title, description);
-        return videoService.addVideo(files, video, tags);
+        return videoService.addVideo(file, video,tags);
     }
 
     @GetMapping("/getVideo")
@@ -37,6 +38,11 @@ public class VideoController {
 
     @GetMapping("/getComment")
     public ResponseEntity getComment() {
+        return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity DeleteVideo() {
         return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
     }
 }

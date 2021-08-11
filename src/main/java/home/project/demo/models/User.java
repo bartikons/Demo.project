@@ -7,6 +7,7 @@ import lombok.ToString;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.security.SecureRandom;
 
 @Getter
 @Setter
@@ -15,7 +16,6 @@ import javax.persistence.*;
 @Table(name = "users")
 @EntityListeners(AuditingEntityListener.class)
 public class User {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +26,7 @@ public class User {
 
     @Column(name = "password", columnDefinition = "TEXT")
     private String password;
+
 
     public User(String username, String password) {
         this.username = username;

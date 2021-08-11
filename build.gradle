@@ -31,12 +31,13 @@ dependencies {
     implementation 'org.springframework.session:spring-session-core:2.5.1'
     compileOnly 'org.projectlombok:lombok:1.18.20'
     developmentOnly 'org.springframework.boot:spring-boot-devtools:2.5.3'
-    runtimeOnly 'com.h2database:h2:1.4.200'
-    runtimeOnly 'org.postgresql:postgresql:42.2.23.jre7'
     annotationProcessor 'org.projectlombok:lombok:1.18.20'
     testImplementation 'org.springframework.boot:spring-boot-starter-test:2.5.3'
     testImplementation 'org.springframework.security:spring-security-test:5.5.1'
     compileOnly group: 'com.github.jmnarloch', name: 'modelmapper-spring-boot-starter', version: '1.0.1'
+    implementation 'mysql:mysql-connector-java:8.0.25'
+    implementation 'org.bouncycastle:bcprov-jdk15on:1.69'
+    compileOnly group: 'io.jsonwebtoken', name: 'jjwt', version: '0.2'
 }
 
 test {
