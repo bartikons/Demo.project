@@ -29,7 +29,7 @@ public class Tag {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "nameTag", columnDefinition = "TEXT")
+    @Column(name = "name_Tag", columnDefinition = "TEXT")
     private String nameTag;
 
     @ManyToMany(mappedBy = "tags")

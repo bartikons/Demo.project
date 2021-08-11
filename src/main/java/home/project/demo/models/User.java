@@ -27,6 +27,7 @@ public class User {
     @Column(name = "password", columnDefinition = "TEXT")
     private String password;
 
+
     public User(String username, String password) {
         this.username = username;
         this.password = password;

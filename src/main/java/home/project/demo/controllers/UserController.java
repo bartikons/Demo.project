@@ -1,5 +1,8 @@
 package home.project.demo.controllers;
 
+import home.project.demo.commands.JwtCommand;
+import home.project.demo.commands.LoginCommand;
+import home.project.demo.dtos.JwtDto;
 import home.project.demo.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +20,8 @@ public class UserController {
 
     //temporal string
     @PostMapping("/logIn")
-    public ResponseEntity<String> LogInUser(
-            @RequestParam("username") String Username,
-            @RequestParam("password") String password) {
-        return userService.logIn(Username, password);
+    public ResponseEntity<JwtDto> LogInUser(@RequestBody LoginCommand loginCommand) {
+        return userService.logIn(loginCommand);
     }
 
     @GetMapping("/logOut")
@@ -34,9 +35,7 @@ public class UserController {
     }
 
     @PostMapping("/CreateAccount")
-    public ResponseEntity<String> createAccount(
-            @RequestParam("username") String Username,
-            @RequestParam("password") String password) {
-        return userService.createAccount(Username, password);
+    public ResponseEntity<String> createAccount(@RequestBody LoginCommand loginCommand) {
+        return userService.createAccount(loginCommand);
     }
 }
